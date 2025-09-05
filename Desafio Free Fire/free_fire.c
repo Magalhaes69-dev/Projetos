@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // Define o tamanho máximo das constantes
 #define MAX_ITENS 10 //quantidade máxima de itens
@@ -78,6 +79,8 @@ int main(){
 void inserirItem(Item mochila[], int *quantidade) {
     if (*quantidade == MAX_ITENS) {
         printf("\nERRO: Mochila cheia, impossível adicionar mais itens!\n");
+        printf("\nPressione Enter para continuar...");
+        getchar();
         return;
     }
 
@@ -104,11 +107,15 @@ void inserirItem(Item mochila[], int *quantidade) {
     (*quantidade)++;
 
     printf("\nItem '%s' adicionado com sucesso!\n", novoItem.nome);
+    printf("\nPressione Enter para continuar...");
+    getchar();
 }
 
 void removerItem(Item mochila[], int *quantidade) {
     if (*quantidade == 0) {
-        printf("\nA mochila esta vazia. Nao há itens para remover.\n");
+        printf("\nA mochila esta vazia. Nao há itens para remover!\n");
+        printf("\nPressione Enter para continuar...");
+        getchar();
         return;
     }
     
@@ -118,7 +125,7 @@ void removerItem(Item mochila[], int *quantidade) {
     fgets(nomeParaRemover, MAX_NOME, stdin);
     nomeParaRemover[strcspn(nomeParaRemover, "\n")] = 0;
 
-    int indice = -1; //inicializa como não encontrado
+    int indice = -1; // flag => inicializa o íncide como ainda não encontrado
     for (int i = 0; i < *quantidade; i++) {
         if (strcmp(mochila[i].nome, nomeParaRemover) == 0) {
             indice = i;
@@ -128,6 +135,8 @@ void removerItem(Item mochila[], int *quantidade) {
 
     if (indice == -1) {
         printf("\nERRO: Item '%s' não foi encontrado na mochila.\n", nomeParaRemover);
+        printf("\nPressione Enter para continuar...");
+        getchar();
         return;
     }
 
@@ -140,6 +149,8 @@ void removerItem(Item mochila[], int *quantidade) {
     (*quantidade)--;
 
     printf("\nItem '%s' removido com sucesso!\n", nomeParaRemover);
+    printf("\nPressione Enter para continuar...");
+    getchar();
 }
 
 void listarItens(const Item mochila[], int quantidade) {
@@ -148,7 +159,7 @@ void listarItens(const Item mochila[], int quantidade) {
     printf("\n-------------------------------------------------------------------\n");
 
     if (quantidade == 0) {
-        printf("A mochila esta vazia.\n");
+        printf("A mochila esta vazia. Não há itens para listar!\n");
 
     } else {
         printf("%-30s | %-20s | %10s\n", "NOME", "TIPO", "QUANTIDADE"); //cria a tabela
@@ -159,11 +170,15 @@ void listarItens(const Item mochila[], int quantidade) {
         }
     }
     printf("-------------------------------------------------------------------\n");
+    printf("\nPressione Enter para continuar...");
+    getchar();
 }
 
 void buscarItem(const Item mochila[], int quantidade) {
      if (quantidade == 0) {
         printf("\nA mochila esta vazia. Nao ha itens para buscar.\n");
+        printf("\nPressione Enter para continuar...");
+        getchar();
         return;
     }
 
@@ -173,7 +188,7 @@ void buscarItem(const Item mochila[], int quantidade) {
     fgets(nomeParaBuscar, MAX_NOME, stdin);
     nomeParaBuscar[strcspn(nomeParaBuscar, "\n")] = 0;
 
-    int indice = -1;
+    int indice = -1; 
 
     for (int i = 0; i < quantidade; i++) {
         if (strcmp(mochila[i].nome, nomeParaBuscar) == 0) { //se True, encontrou o item
@@ -190,6 +205,8 @@ void buscarItem(const Item mochila[], int quantidade) {
         printf("-----------------------\n");
 
     } else {
-        printf("\nERRO: Item '%s' nao foi encontrado na mochila.\n", nomeParaBuscar);
+        printf("\nERRO: Item '%s' nao foi encontrado na mochila!\n", nomeParaBuscar);
     }
+    printf("\nPressione Enter para continuar...");
+    getchar();
 }
