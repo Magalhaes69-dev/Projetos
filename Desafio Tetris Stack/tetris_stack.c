@@ -184,6 +184,64 @@ void usarPecaReservada(Pilha *p) {
     printf("\nFoi usada a peça reservada '%c' (ID: %d).\n", pecaUsada.nome, pecaUsada.id);
 }
 
+// Troca a peça da frente da fila com o topo da pilha.
+void trocarPecaAtual(Fila *f, Pilha *p) {
+    if (filaVazia(f) || pilhaVazia(p)) {
+        printf("\nA fila ou a pilha está vazia. Nâo é possível trocar.\n");
+        return;
+    }
+
+    // Realiza a troca usando uma variável temporária.
+    Peca temp = f->itens[f->inicio];
+    f->itens[f->inicio] = p->itens[p->topo];
+    p->itens[p->topo] = temp;
+
+    printf("\nTroca da peça atual da fila com a pilha realizada com sucesso.\n");
+}
+
+// Troca as 3 primeiras peças da fila com as 3 peças da pilha.
+void trocaMultipla(Fila *f, Pilha *p) {
+    if (f->total < 3 || (p->topo + 1) < 3) {
+        printf("\nTroca multipla requer pelo menos 3 peças na fila e 3 na pilha.\n");
+        return;
+    }
+
+    // Cria fila e pilha temporárias.
+    Peca temp_fila[3];
+    Peca temp_pilha[3];
+
+    int idx_fila = f->inicio;
+    int idx_pilha = p->topo;
+
+    // Copia os 3 primeiros da fila para a fila temporária.
+    for (int i = 0; i < 3; i++) {
+        temp_fila[i] = f->itens[idx_fila];
+        idx_fila = (idx_fila + 1) % MAX_FILA;
+    }
+
+    // Copia os 3 da pilha para a pilha temporária.
+    for (int i = 0; i < 3; i++) {
+        temp_pilha[i] = p->itens[idx_pilha];
+        idx_pilha--;
+    }
+
+    // Insere a pilha temporária na fila.
+    idx_fila = f->inicio;
+    for (int i = 0; i < 3; i++) {
+        f->itens[idx_fila] = temp_pilha[i];
+        idx_fila = (idx_fila + 1) % MAX_FILA;
+    }
+
+    // Insere a fila temporária na pilha.
+    idx_pilha = 0; // começa na base
+    for (int i = 0; i < 3; i++) {
+        p->itens[idx_pilha] = temp_fila[i];
+        idx_pilha++;
+    }
+
+    printf("\nTroca realizada entre os 3 primeiros da fila e os 3 da pilha.\n");
+}
+
 // Mostra o estado atual da fila e da pilha.
 void mostrarEstadoAtual(Fila *f, Pilha *p) {
     printf("\n--- ESTADO ATUAL DO JOGO ---\n");
@@ -221,6 +279,9 @@ void mostrarMenu() {
     printf("1 - Jogar peça.\n");
     printf("2 - Reservar peça.\n");
     printf("3 - Usar peça reservada.\n");
+    printf("4 - Trocar peça atual.\n");
+    printf("5 - Troca multipla.\n");
+    printf("6 - Exibe estado atual.\n");
     printf("0 - Sair\n");
     printf("Escolha uma opção: ");
 }
@@ -265,6 +326,18 @@ int main() {
                 usarPecaReservada(&pilhaDeReserva);
                 break;
 
+            case 4:
+                trocarPecaAtual(&filaDePecas, &pilhaDeReserva);
+                break;
+
+            case 5:
+                trocaMultipla(&filaDePecas, &pilhaDeReserva);
+                break;
+
+            case 6:
+                mostrarEstadoAtual(&filaDePecas, &pilhaDeReserva);
+                break;
+
             case 0:
                 printf("\nEncerrando o programa. Até mais!\n");
                 break;
@@ -274,8 +347,8 @@ int main() {
                 break;
         }
 
-        // Mostra o estado do jogo após cada ação (exceto ao sair).
-        if (opcao != 0) {
+        // Mostra o estado do jogo após cada ação (exceto ao sair e opção 6).
+        if (opcao != 0 && opcao != 6) {
             mostrarEstadoAtual(&filaDePecas, &pilhaDeReserva);
         }
 
